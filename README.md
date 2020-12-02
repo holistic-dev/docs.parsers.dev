@@ -1,4 +1,65 @@
+---
+description: >-
+  The parsers.dev API is organized around REST with JSON request and responses
+  and uses standard HTTP response codes.
+---
+
 # API Reference \(beta\)
+
+{% hint style="danger" %}
+The current **API** status is **BETA**. Minor changes are possible before leaving this status. After fixing the state, JSON-schemas will be published, with a description of the formats of requests and responses
+{% endhint %}
+
+## Authentication
+
+The **parsers.dev API** uses API key to authenticate requests. You can view and manage your API key in the [**holistic.dev**](https://app.holistic.dev) Account Settings.
+
+The **parsers.dev APIs** is a REST-based service. Subsequently, all requests to the APIs require this **HTTP header**:
+
+```http
+x-api-key: Your holistic.dev API key
+```
+
+## Content type
+
+The **holistic.dev APIs** is also a JSON-based service. You have to add **Content-Type** HTTP header to all your requests:
+
+```javascript
+Content-Type: application/json
+```
+
+## URL and API versioning
+
+Only one API version is operating at this time. Use this base URL for your requests:
+
+> **https://api.parsers.dev/api/v1**
+
+## Responses
+
+All responses are JSON-based and follow one of these formats:
+
+```javascript
+// successful response
+{
+  "status": "OK",
+  "data": {...}
+  }
+}
+```
+
+```javascript
+// error response
+{
+  "status": "ERROR",
+  "data": {
+    "code": <http-code>,
+    "message": "<error-message>",
+    "details": <mixed-object(optional)>,
+  }
+}
+```
+
+Http codes and error message you can find at **Errors** section
 
 {% api-method method="post" host="https://api.parsers.dev" path="/api/v1/parse/" %}
 {% api-method-summary %}
