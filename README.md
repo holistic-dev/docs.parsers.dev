@@ -447,10 +447,10 @@ axios({
 
 {% tab title="Bash" %}
 ```bash
-HOLISTICDEV_API_KEY="<your-api-key>" \
+PARSERSDEV_API_KEY="<your-api-key>" \
 echo "{\"sql\": \"CREATE TABLE t(); SELECT 1; SELECT 2\"}" | \
 curl \
-  --header "x-api-key: $HOLISTICDEV_API_KEY" \
+  --header "x-api-key: $PARSERSDEV_API_KEY" \
   --header "Content-Type: application/json" \
   --request POST --data @- https://api.parsers.dev/api/v1/parse/postgresql/
 ```
@@ -1074,10 +1074,10 @@ axios({
 
 {% tab title="Bash" %}
 ```bash
-HOLISTICDEV_API_KEY="<your-api-key>" \
+PARSERSDEV_API_KEY="<your-api-key>" \
 echo "{\"ddl\": \"CREATE TABLE t (a int); CREATE\", dml: [\"table t; table t1\", \"table\", \"select * FROM t WHERE a = $1\"]}" | \
 curl \
-  --header "x-api-key: $HOLISTICDEV_API_KEY" \
+  --header "x-api-key: $PARSERSDEV_API_KEY" \
   --header "Content-Type: application/json" \
   --request POST --data @- https://api.parsers.dev/api/v1/compile/postgresql/
 ```
