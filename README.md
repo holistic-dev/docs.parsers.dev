@@ -12,17 +12,17 @@ The current **API** status is **BETA**. Minor changes are possible before leavin
 
 ## Authentication
 
-The **parsers.dev API** uses API key to authenticate requests. You can view and manage your API key in the [**holistic.dev**](https://app.holistic.dev) Account Settings.
+The **parsers.dev API** uses API key to authenticate requests. You can view and manage your API key in the [**parsers.dev** ](https://parsers.dev/auth/login)Account Settings.
 
 The **parsers.dev APIs** is a REST-based service. Subsequently, all requests to the APIs require this **HTTP header**:
 
 ```http
-x-api-key: Your holistic.dev API key
+x-api-key: Your parsers.dev API key
 ```
 
 ## Content type
 
-The **holistic.dev APIs** is also a JSON-based service. You have to add **Content-Type** HTTP header to all your requests:
+The **parsers.dev APIs** is also a JSON-based service. You have to add **Content-Type** HTTP header to all your requests:
 
 ```javascript
 Content-Type: application/json
@@ -61,28 +61,24 @@ All responses are JSON-based and follow one of these formats:
 
 Http codes and error message you can find at **Errors** section
 
-{% api-method method="post" host="https://api.parsers.dev" path="/api/v1/parse/" %}
+{% api-method method="post" host="https://api.parsers.dev" path="/api/v1/parse/:database" %}
 {% api-method-summary %}
 Parse SQL \(SQL → AST\)
 {% endapi-method-summary %}
 
 {% api-method-description %}
-This endpoint allows you to get **Abstract Syntax Tree** represented in your SQL-queries. You can parse any supported syntax \(**DDL, DML, DCL, TCL**, and another specific syntax\)
+This endpoint allows you to get **Abstract Syntax Tree** represented in your SQL-queries. You can parse any supported syntax \(**DDL, DML, DCL, TCL**, and another specific syntax\). **:database** is database type \(**postgresql** and **snowflake** are supported\)
 {% endapi-method-description %}
 
 {% api-method-spec %}
 {% api-method-request %}
 {% api-method-headers %}
 {% api-method-parameter name="x-api-key" type="string" required=true %}
-Authentication token \(your api key from app.holistic.dev\)
+Authentication token \(your api key from parsers.dev account settings\)
 {% endapi-method-parameter %}
 {% endapi-method-headers %}
 
 {% api-method-body-parameters %}
-{% api-method-parameter name="db" type="string" required=true %}
-Database type \('pg' or 'snowflake'\)
-{% endapi-method-parameter %}
-
 {% api-method-parameter name="sql" type="string" required=true %}
 SQL source code, separated using semicolon
 {% endapi-method-parameter %}
@@ -415,7 +411,6 @@ User not found
 {% tab title="JSON" %}
 ```javascript
 {
-  "db": "pg",
   "sql": "CREATE TABLE t(); SELECT 1; SELECT 1 FROM ; SELECT 2"
 }
 ```
@@ -428,7 +423,6 @@ const axios = require ('axios');
 const api_key = '<your-api-key>';
 
 const data = {
-  db: 'pg',
   sql: 'CREATE TABLE t(); SELECT 1; SELECT 1 FROM ; SELECT 2',
 };
 
@@ -439,7 +433,7 @@ axios({
     'x-api-key': api_key,
   },
   data,
-  url: `https://api.parsers.dev/api/v1/parse/`,
+  url: `https://api.parsers.dev/api/v1/parse/postgresql/`,
 }).then((response) => {
   console.log(response.data);
 })
@@ -454,22 +448,22 @@ axios({
 {% tab title="Bash" %}
 ```bash
 HOLISTICDEV_API_KEY="<your-api-key>" \
-echo "{\"db\":\"pg\", \"sql\": \"CREATE TABLE t(); SELECT 1; SELECT 2\"}" | \
+echo "{\"sql\": \"CREATE TABLE t(); SELECT 1; SELECT 2\"}" | \
 curl \
   --header "x-api-key: $HOLISTICDEV_API_KEY" \
   --header "Content-Type: application/json" \
-  --request POST --data @- https://api.parsers.dev/api/v1/parse/
+  --request POST --data @- https://api.parsers.dev/api/v1/parse/postgresql/
 ```
 {% endtab %}
 {% endtabs %}
 
-{% api-method method="post" host="https://api.parsers.dev" path="/api/v1/compile/" %}
+{% api-method method="post" host="https://api.parsers.dev" path="/api/v1/compile/:database" %}
 {% api-method-summary %}
 Compile SQL \(SQL → Special Object\)
 {% endapi-method-summary %}
 
 {% api-method-description %}
-This endpoint allows you to get a special object compiled based on your DDL or DML query. Because DML strictly depends on database schema \(DDL\), DML can be compiled to a special object, based on DDL only.
+This endpoint allows you to get a special object compiled based on your DDL or DML query. Because DML strictly depends on database schema \(DDL\), DML can be compiled to a special object, based on DDL only. **:database** is database type \(**postgresql** only\).
 {% endapi-method-description %}
 
 {% api-method-spec %}
@@ -487,10 +481,6 @@ any value for AST in result
 {% endapi-method-query-parameters %}
 
 {% api-method-body-parameters %}
-{% api-method-parameter name="db" type="string" required=true %}
-Database type \(only 'pg' supported\)
-{% endapi-method-parameter %}
-
 {% api-method-parameter name="ddl" type="string" required=true %}
 Database schema \(DDL statements\) source code, separated using semicolon
 {% endapi-method-parameter %}
@@ -1038,7 +1028,6 @@ User not found
 {% tab title="JSON" %}
 ```javascript
 {
-	"db": "pg",
     "ddl": "CREATE TABLE t (a int); CREATE",
     "dmls": [
         "table t; table t1",
@@ -1056,7 +1045,6 @@ const axios = require ('axios');
 const api_key = '<your-api-key>';
 
 const data = {
-  db: 'pg',
   ddl: 'CREATE TABLE t (a int); CREATE',
   dmls: [
     'table t; table t1',
@@ -1072,7 +1060,7 @@ axios({
     'x-api-key': api_key,
   },
   data,
-  url: `https://api.parsers.dev/api/v1/compile/`,
+  url: `https://api.parsers.dev/api/v1/compile/postgresql/`,
 }).then((response) => {
   console.log(response.data);
 })
@@ -1087,11 +1075,11 @@ axios({
 {% tab title="Bash" %}
 ```bash
 HOLISTICDEV_API_KEY="<your-api-key>" \
-echo "{\"db\":\"pg\", \"ddl\": \"CREATE TABLE t (a int); CREATE\", dml: [\"table t; table t1\", \"table\", \"select * FROM t WHERE a = $1\"]}" | \
+echo "{\"ddl\": \"CREATE TABLE t (a int); CREATE\", dml: [\"table t; table t1\", \"table\", \"select * FROM t WHERE a = $1\"]}" | \
 curl \
   --header "x-api-key: $HOLISTICDEV_API_KEY" \
   --header "Content-Type: application/json" \
-  --request POST --data @- https://api.parsers.dev/api/v1/compile/
+  --request POST --data @- https://api.parsers.dev/api/v1/compile/postgresql/
 ```
 {% endtab %}
 {% endtabs %}
