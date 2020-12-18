@@ -447,7 +447,7 @@ axios({
 
 {% tab title="Bash" %}
 ```bash
-PARSERSDEV_API_KEY="<your-api-key>" \
+PARSERSDEV_API_KEY="<your-api-key>"; \
 echo "{\"sql\": \"CREATE TABLE t(); SELECT 1; SELECT 2\"}" | \
 curl \
   --header "x-api-key: $PARSERSDEV_API_KEY" \
@@ -1074,7 +1074,7 @@ axios({
 
 {% tab title="Bash" %}
 ```bash
-PARSERSDEV_API_KEY="<your-api-key>" \
+PARSERSDEV_API_KEY="<your-api-key>"; \
 echo "{\"ddl\": \"CREATE TABLE t (a int); CREATE\", dml: [\"table t; table t1\", \"table\", \"select * FROM t WHERE a = $1\"]}" | \
 curl \
   --header "x-api-key: $PARSERSDEV_API_KEY" \
