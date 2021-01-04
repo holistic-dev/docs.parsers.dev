@@ -61,13 +61,13 @@ All responses are JSON-based and follow one of these formats:
 
 Http codes and error message you can find at **Errors** section
 
-{% api-method method="post" host="https://api.parsers.dev" path="/api/v1/parse/:database" %}
+{% api-method method="post" host="https://api.parsers.dev" path="/api/v1/parse/:dialect" %}
 {% api-method-summary %}
 Parse SQL \(SQL → AST\)
 {% endapi-method-summary %}
 
 {% api-method-description %}
-This endpoint allows you to get **Abstract Syntax Tree** represented in your SQL-queries. You can parse any supported syntax \(**DDL, DML, DCL, TCL**, and another specific syntax\). **:database** is database type \(**postgresql** and **snowflake** are supported\)
+This endpoint allows you to get **Abstract Syntax Tree** represented in your SQL-queries. You can parse any supported syntax \(**DDL, DML, DCL, TCL**, and another specific syntax\). **:dialect** is SQL dialect type \(**postgresql,** **snowflake** and **cypher** are supported\)
 {% endapi-method-description %}
 
 {% api-method-spec %}
@@ -457,13 +457,13 @@ curl \
 {% endtab %}
 {% endtabs %}
 
-{% api-method method="post" host="https://api.parsers.dev" path="/api/v1/compile/:database" %}
+{% api-method method="post" host="https://api.parsers.dev" path="/api/v1/compile/:dialect" %}
 {% api-method-summary %}
 Compile SQL \(SQL → Special Object\)
 {% endapi-method-summary %}
 
 {% api-method-description %}
-This endpoint allows you to get a special object compiled based on your DDL or DML query. Because DML strictly depends on database schema \(DDL\), DML can be compiled to a special object, based on DDL only. **:database** is database type \(**postgresql** only\).
+This endpoint allows you to get a special object compiled based on your DDL or DML query. Because DML strictly depends on database schema \(DDL\), DML can be compiled to a special object, based on DDL only. **:dialect** is SQL dialect type \(**postgresql** and **snowflake** only\).
 {% endapi-method-description %}
 
 {% api-method-spec %}
