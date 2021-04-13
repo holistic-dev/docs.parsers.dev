@@ -74,7 +74,7 @@ This endpoint allows you to get **Abstract Syntax Tree** represented in your SQL
 {% api-method-request %}
 {% api-method-headers %}
 {% api-method-parameter name="x-api-key" type="string" required=true %}
-Authentication token \(your api key from parsers.dev account settings\)
+Authentication token \(your api key from parsers.dev or holistic.dev account settings\)
 {% endapi-method-parameter %}
 {% endapi-method-headers %}
 
@@ -470,7 +470,7 @@ This endpoint allows you to get a special object compiled based on your DDL or D
 {% api-method-request %}
 {% api-method-headers %}
 {% api-method-parameter name="x-api-key" type="string" required=true %}
-Authentication token \(your api key from app.holisitic.dev\)
+Authentication token \(your api key from parsers.dev or holistic.dev account settings\)
 {% endapi-method-parameter %}
 {% endapi-method-headers %}
 
@@ -1080,6 +1080,102 @@ curl \
   --header "x-api-key: $PARSERSDEV_API_KEY" \
   --header "Content-Type: application/json" \
   --request POST --data @- https://api.parsers.dev/api/v1/compile/postgresql/
+```
+{% endtab %}
+{% endtabs %}
+
+{% api-method method="post" host="https://api.parsers.dev" path="/api/v1/tools/snowflake/getddl-reorder" %}
+{% api-method-summary %}
+Snowflake GET\_DDL function result reorder
+{% endapi-method-summary %}
+
+{% api-method-description %}
+Fix DDL statements ordering in **GET\_DDL** function result
+{% endapi-method-description %}
+
+{% api-method-spec %}
+{% api-method-request %}
+{% api-method-headers %}
+{% api-method-parameter name="x-api-key" required=true type="string" %}
+Authentication token \(your api key from parsers.dev or holistic.dev account settings\)
+{% endapi-method-parameter %}
+{% endapi-method-headers %}
+
+{% api-method-body-parameters %}
+{% api-method-parameter name="sql" type="string" required=true %}
+DDL need to reorder
+{% endapi-method-parameter %}
+{% endapi-method-body-parameters %}
+{% endapi-method-request %}
+
+{% api-method-response %}
+{% api-method-response-example httpCode=200 %}
+{% api-method-response-example-description %}
+SQL successfully reordered
+{% endapi-method-response-example-description %}
+
+```javascript
+{
+    "status": "OK",
+    "data": [
+        "<statement #1>",
+        ...
+        "<statement #N>"
+    ]
+}
+```
+{% endapi-method-response-example %}
+{% endapi-method-response %}
+{% endapi-method-spec %}
+{% endapi-method %}
+
+
+
+**Example:**
+
+{% tabs %}
+{% tab title="JSON" %}
+```javascript
+{
+    "sql": "create view v1 as select * from t; create table t (a int);"
+}
+```
+{% endtab %}
+
+{% tab title="JavaScript" %}
+    const axios = require ('axios');
+
+    const api_key = '<your-api-key>';
+
+    const data = {
+      sql: 'create view v1 as select * from t; create table t (a int);'
+    };
+
+    axios({
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': api_key,
+      },
+      data,
+      url: `https://api.parsers.dev/api/v1/tools/snowflake/getddl-reorder`,
+    }).then((response) => {
+      console.log(response.data);
+    })
+    .catch(function (error) {
+      console.error('api.parsers.dev error:');
+      console.error(JSON.stringify(error.response.data, null, 2));
+    });
+{% endtab %}
+
+{% tab title="Bash" %}
+```
+PARSERSDEV_API_KEY="<your-api-key>"; \
+echo "{\"sql\": \"Create view v1 as select * from t; create table t (a int);\"}" | \
+curl \
+  --header "x-api-key: $PARSERSDEV_API_KEY" \
+  --header "Content-Type: application/json" \
+  --request POST --data @- https://api.parsers.dev/api/v1/tools/snowflake/getddl-reorder
 ```
 {% endtab %}
 {% endtabs %}
